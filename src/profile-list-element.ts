@@ -1,7 +1,7 @@
-import { LitElement, css, html } from "lit";
-import { customElement, property } from "lit/decorators.js";
-import { dialog } from "./components/dialog";
-import { renderAddUserDialogContent } from "./components/add-user-dialog";
+import { LitElement, css, html } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { dialog } from './components/dialog';
+import { renderAddUserDialogContent } from './components/add-user-dialog';
 
 export interface Profile {
   id: string;
@@ -9,7 +9,7 @@ export interface Profile {
   avatar: string;
 }
 
-@customElement("profile-list-element")
+@customElement('profile-list-element')
 export class ProfileListElement extends LitElement {
   @property({ type: Array })
   profiles: Profile[] = [];

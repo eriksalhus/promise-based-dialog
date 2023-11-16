@@ -1,14 +1,14 @@
-import { html } from "lit";
+import { html } from 'lit';
 
 const avatars = [
-  "a3bf6b1d5254a10808d64b52e71a3e5d",
-  "801d583156a58dd471e49c3d6ebebc44",
-  "728d77ce762eba95cce245a55dc94050",
-  "c7c8fdafb02f85e5960dda582db1af88",
-  "c12a582a7550d1658b287476ed66e6da",
-  "30046aa5a7238a3ebf64f1396101c4dc",
-  "945241ba2ddd23623c9c1934264f6ac2",
-  "284470c11c380507f1085e2fde32d467",
+  'a3bf6b1d5254a10808d64b52e71a3e5d',
+  '801d583156a58dd471e49c3d6ebebc44',
+  '728d77ce762eba95cce245a55dc94050',
+  'c7c8fdafb02f85e5960dda582db1af88',
+  'c12a582a7550d1658b287476ed66e6da',
+  '30046aa5a7238a3ebf64f1396101c4dc',
+  '945241ba2ddd23623c9c1934264f6ac2',
+  '284470c11c380507f1085e2fde32d467',
 ];
 
 export function renderAddUserDialogContent() {
@@ -28,7 +28,7 @@ export function renderAddUserDialogContent() {
           title="Close dialog"
           type="reset"
           @click="${(event: MouseEvent) => {
-            (event.target as HTMLElement).closest("dialog")?.close("close");
+            (event.target as HTMLElement).closest('dialog')?.close('close');
           }}"
         >
           <title>Close dialog icon</title>
@@ -56,7 +56,7 @@ export function renderAddUserDialogContent() {
           type="reset"
           autofocus
           @click="${(event: MouseEvent) => {
-            (event.target as HTMLElement).closest("dialog")?.close("cancel");
+            (event.target as HTMLElement).closest('dialog')?.close('cancel');
           }}"
         >
           Reset

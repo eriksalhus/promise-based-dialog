@@ -134,7 +134,7 @@ dialog > form > footer {
     }
 
     @media (max-width: 410px) {
-      & button[type="reset"] {
+      & button[type='reset'] {
         display: none;
       }
     }

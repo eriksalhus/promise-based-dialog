@@ -1,5 +1,5 @@
 declare global {
   interface HTMLElementTagNameMap {
-    "user-list-element": UserListElement;
+    'user-list-element': UserListElement;
   }
 }

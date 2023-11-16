@@ -1,8 +1,8 @@
-import { type TemplateResult, html, render } from "lit";
+import { type TemplateResult, html, render } from 'lit';
 
 export interface DialogResult {
   id: number;
-  type: "cancel" | "close" | "reset" | "submit";
+  type: 'cancel' | 'close' | 'reset' | 'submit';
   [key: string]: any;
 }
 
@@ -29,14 +29,14 @@ export function renderDialog({
       @submit="${function (this: HTMLDialogElement, event: Event) {
         resolve({
           id,
-          type: "submit",
+          type: 'submit',
           formData: Object.fromEntries(
             new FormData(event.target as HTMLFormElement)
           ),
         });
       }}"
       @reset="${function (this: HTMLDialogElement, _event: Event) {
-        reject({ id, type: "reset" });
+        reject({ id, type: 'reset' });
       }}"
       @close="${async function (this: HTMLDialogElement, _event: Event) {
         await animationsComplete(this);
@@ -64,11 +64,11 @@ export async function dialog({
     render(renderDialog({ content, resolve, reject }), renderBuffer);
     root.appendChild(renderBuffer);
 
-    const dialogElements = root.querySelectorAll("dialog");
+    const dialogElements = root.querySelectorAll('dialog');
     const dialogElement = dialogElements[dialogElements.length - 1];
 
-    dialogElement?.removeAttribute("inert");
-    dialogElement?.removeAttribute("loading");
+    dialogElement?.removeAttribute('inert');
+    dialogElement?.removeAttribute('loading');
 
     dialogElement?.showModal();
   });
