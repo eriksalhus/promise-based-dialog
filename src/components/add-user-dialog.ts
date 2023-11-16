@@ -39,6 +39,7 @@ export function renderAddUserDialogContent() {
         </button>
       </header>
       <article>
+        <h4>Select your avatar</h4>
         <ul class="avatar-list">
           ${avatars.map((hash) => {
             return html` <li>

@@ -16,7 +16,7 @@ dialog {
   box-shadow: var(--shadow-6);
   z-index: var(--layer-important);
   overflow: hidden;
-  animation: fade-in 0.5s var(--ease-3);
+  transition: opacity 0.5s var(--ease-3);
 
   @media (--motionOK) {
     animation: var(--animation-scale-down) forwards;
@@ -37,131 +37,114 @@ dialog {
       animation-timing-function: var(--ease-squish-2);
     }
   }
-}
 
-dialog:not([open]) {
-  pointer-events: none;
-  animation: fade-out 0.5s var(--ease-3);
-}
-
-dialog::backdrop {
-  backdrop-filter: blur(25px);
-}
-
-dialog::backdrop {
-  transition: backdrop-filter 0.5s ease;
-}
-
-dialog[loading] {
-  visibility: hidden;
-}
-
-dialog[open] {
-  @media (--motionOK) {
-    animation: var(--animation-slide-in-up) forwards;
+  &:not([open]) {
+    pointer-events: none;
+    opacity: 0;
   }
-}
 
-dialog > form {
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  align-items: start;
-  max-block-size: 80vh;
-  max-block-size: 80dvb;
-}
+  &::backdrop {
+    backdrop-filter: blur(25px);
+  }
 
-dialog > form > article {
-  overflow-y: auto;
-  max-block-size: 100%; /* safari */
-  overscroll-behavior-y: contain;
-  display: grid;
-  justify-items: flex-start;
-  gap: var(--size-3);
-  box-shadow: var(--shadow-2);
-  z-index: var(--layer-1);
-  padding-inline: var(--size-5);
-  padding-block: var(--size-3);
+  &::backdrop {
+    transition: backdrop-filter 0.5s ease;
+  }
 
-  @media (--OSlight) {
-    background: var(--surface-1);
+  &[loading] {
+    visibility: hidden;
+  }
 
-    &::-webkit-scrollbar {
-      background: var(--surface-1);
+  &[open] {
+    @media (--motionOK) {
+      animation: var(--animation-slide-in-up) forwards;
     }
   }
 
-  @media (--OSdark) {
-    border-block-start: var(--border-size-1) solid var(--surface-3);
-  }
-}
+  & > form {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    align-items: start;
+    max-block-size: 80vh;
+    max-block-size: 80dvb;
 
-dialog > form > header {
-  display: flex;
-  gap: var(--size-3);
-  justify-content: space-between;
-  align-items: flex-start;
-  padding-block: var(--size-3);
-  padding-inline: var(--size-5);
-}
+    & > article {
+      overflow-y: auto;
+      max-block-size: 100%; /* safari */
+      overscroll-behavior-y: contain;
+      display: grid;
+      justify-items: flex-start;
+      gap: var(--size-3);
+      box-shadow: var(--shadow-2);
+      z-index: var(--layer-1);
+      padding-inline: var(--size-5);
+      padding-block: var(--size-3);
 
-dialog > form > header > button {
-  border-radius: var(--radius-round);
-  padding: 0.75ch;
-  aspect-ratio: 1;
-  flex-shrink: 0;
-  place-items: center;
-  stroke: currentColor;
-  stroke-width: 3px;
-}
+      @media (--OSlight) {
+        background: var(--surface-1);
 
-dialog > form > footer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--size-3);
-  justify-content: space-between;
-  align-items: flex-start;
-  padding-inline: var(--size-5);
-  padding-block: var(--size-3);
+        &::-webkit-scrollbar {
+          background: var(--surface-1);
+        }
+      }
 
-  & > menu {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--size-3);
-    padding-inline-start: 0;
-
-    &:only-child {
-      margin-inline-start: auto;
-    }
-
-    @media (max-width: 410px) {
-      & button[type='reset'] {
-        display: none;
+      @media (--OSdark) {
+        border-block-start: var(--border-size-1) solid var(--surface-3);
       }
     }
-  }
-}
 
-& > :is(header, footer) {
-  background-color: var(--surface-2);
+    & > header {
+      display: flex;
+      gap: var(--size-3);
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-block: var(--size-3);
+      padding-inline: var(--size-5);
 
-  @media (--OSdark) {
-    background-color: var(--surface-1);
-  }
-}
+      & > button {
+        border-radius: var(--radius-round);
+        padding: 0.75ch;
+        aspect-ratio: 1;
+        flex-shrink: 0;
+        place-items: center;
+        stroke: currentColor;
+        stroke-width: 3px;
+      }
+    }
 
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@keyframes fade-out {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
+    & > footer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--size-3);
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-inline: var(--size-5);
+      padding-block: var(--size-3);
+
+      & > menu {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--size-3);
+        padding-inline-start: 0;
+
+        &:only-child {
+          margin-inline-start: auto;
+        }
+
+        @media (max-width: 410px) {
+          & button[type='reset'] {
+            display: none;
+          }
+        }
+      }
+    }
+
+    & > :is(header, footer) {
+      background-color: var(--surface-2);
+
+      @media (--OSdark) {
+        background-color: var(--surface-1);
+      }
+    }
   }
 }

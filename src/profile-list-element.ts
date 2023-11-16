@@ -2,6 +2,7 @@ import { LitElement, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { dialog } from './components/dialog';
 import { renderAddUserDialogContent } from './components/add-user-dialog';
+import { renderRemoveUserDialogContent } from './components/remove-user-dialog';
 
 export interface Profile {
   id: string;
@@ -77,8 +78,13 @@ export class ProfileListElement extends LitElement {
     }
   }
 
-  private removeProfile(id: string) {
-    this.profiles = this.profiles.filter((profile) => profile.id !== id);
+  private async removeProfile(id: string) {
+    try {
+      await dialog({ content: renderRemoveUserDialogContent() });
+      this.profiles = this.profiles.filter((profile) => profile.id !== id);
+    } catch (error) {
+      console.log('error', error);
+    }
   }
 
   static styles = css`
@@ -95,6 +101,7 @@ export class ProfileListElement extends LitElement {
       flex-wrap: wrap;
       place-content: center;
       gap: var(--size-5);
+      transition: all 250ms ease-in-out;
     }
 
     .user {

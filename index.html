@@ -4,14 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light dark" />
-    <title>Vite + Lit + TS</title>
+    <title>Promise based dialog</title>
     <link rel="stylesheet" href="./src/index.css" />
-    <script type="module" src="/src/profile-list-element.ts"></script>
+    <script type="module" src="/src/index.ts"></script>
   </head>
   <body>
     <profile-list-element></profile-list-element>
     <a
-      href="https://github.com/argyleink/gui-challenges"
+      href="https://github.com/eriksalhus/promise-based-dialog"
       class="github-corner"
       aria-label="View source on GitHub"
     >
@@ -33,5 +33,12 @@
         ></path>
       </svg>
     </a>
+    <script type="application/javascript">
+      document.addEventListener('dialog:opening', console.log);
+      document.addEventListener('dialog:opened', console.log);
+      document.addEventListener('dialog:closing', console.log);
+      document.addEventListener('dialog:closed', console.log);
+      document.addEventListener('dialog:removed', console.log);
+    </script>
   </body>
 </html>
