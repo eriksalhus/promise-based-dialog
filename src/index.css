@@ -1,0 +1,126 @@
+@import "open-props/style";
+@import "open-props/normalize";
+@import "open-props/media";
+@import "open-props/buttons";
+
+@import url("./components/dialog.css");
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+
+  --size-m: 7.5rem;
+  --color-purple: purple;
+  --color-white: white;
+}
+
+body {
+  display: grid;
+  place-content: center;
+  padding-inline: var(--size-5);
+}
+
+main {
+  display: flex;
+  flex-wrap: wrap;
+  place-content: center;
+  gap: var(--size-5);
+}
+
+.avatar-list {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  gap: 1rem;
+  margin: 0;
+}
+
+.avatar-list li {
+  padding: 0;
+}
+
+.avatar-list label {
+  cursor: pointer;
+  width: var(--size-m);
+  height: var(--size-m);
+  background-size: contain;
+  background-repeat: no-repeat;
+  display: inline-block;
+  filter: brightness(1.9) grayscale(0.9) opacity(0.7);
+}
+.avatar-list input {
+  appearance: none;
+  position: absolute;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-m);
+  height: var(--size-m);
+}
+.avatar-list input:active + label {
+  opacity: 0.9;
+  filter: none;
+}
+
+.avatar-list input:checked + label {
+  filter: none;
+}
+
+.icon-headline {
+  display: flex;
+  gap: var(--size-3);
+  align-items: center;
+}
+
+.icon-headline > svg {
+  inline-size: 2em;
+  stroke: var(--text-2);
+}
+
+.github-corner {
+  position: absolute;
+  right: 4px;
+  width: 80px;
+  height: 80px;
+  fill: var(--surface-4);
+  color: var(--surface-1);
+}
+.github-corner:hover .octo-arm {
+  animation: octocat-wave 560ms ease-in-out;
+}
+
+.github-corner > svg {
+  fill: inherit;
+  stroke: inherit;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+@keyframes octocat-wave {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  20%,
+  60% {
+    transform: rotate(-25deg);
+  }
+  40%,
+  80% {
+    transform: rotate(10deg);
+  }
+}
