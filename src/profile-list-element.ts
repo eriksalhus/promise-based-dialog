@@ -6,7 +6,6 @@ import { renderRemoveUserDialogContent } from './components/remove-user-dialog';
 
 export interface Profile {
   id: string;
-  name: string;
   avatar: string;
 }
 
@@ -14,34 +13,56 @@ export interface Profile {
 export class ProfileListElement extends LitElement {
   @property({ type: Array })
   profiles: Profile[] = [];
+  @property({ type: Array })
+  removedProfileIds: string[] = [];
 
   connectedCallback() {
     super.connectedCallback();
     this.renderProfile = this.renderProfile.bind(this);
     this.removeProfile = this.removeProfile.bind(this);
+    this.handleAddProfile = this.handleAddProfile.bind(this);
+    this.addEventListener('click', this);
+  }
+
+  handleEvent(event: Event) {
+    if (event.target instanceof HTMLButtonElement) {
+      if (event.target.hasAttribute('add-user')) {
+        this.handleAddProfile();
+      }
+    }
   }
 
   render() {
     return html`
       ${this.profiles.map(this.renderProfile)}
-
-      <button
-        class="user"
-        add-user
-        @click=${() => this.handleAddProfile()}
-        aria-label="Add user"
-      >
-        <svg width="24" height="24" viewBox="0 0 24 24">
-          <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor"></line>
-          <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor"></line>
-        </svg>
-      </button>
+      <slot></slot>
     `;
   }
 
   renderProfile(profile: Profile) {
+    const isNew = !(this.renderRoot as ShadowRoot).getElementById(profile.id);
+
     return html`
-      <div class="user">
+      <div
+        class="user ${isNew ? 'new' : ''}"
+        id="${profile.id}"
+        ?removing="${this.removedProfileIds.includes(profile.id)}"
+        @animationend="${(event: AnimationEvent) => {
+          if (event.animationName !== 'fade-out') {
+            //throw new Error('Unexpected animation name');
+            console.log('Unexpected animation name');
+
+            return;
+          }
+
+          this.profiles = this.profiles.filter(
+            (_profile) => _profile.id !== profile.id
+          );
+          this.removedProfileIds = this.removedProfileIds.filter(
+            (id) => id !== profile.id
+          );
+        }}"
+      >
         <img
           src="https://doodleipsum.com/700x700/avatar-5?i=${profile.avatar}"
           alt=""
@@ -67,8 +88,7 @@ export class ProfileListElement extends LitElement {
       this.profiles = [
         ...this.profiles,
         {
-          id: this.profiles.length.toString(),
-          name: result.formData.username,
+          id: `profile-${Date.now()}`,
           avatar: result.formData.avatar,
         },
       ];
@@ -81,7 +101,7 @@ export class ProfileListElement extends LitElement {
   private async removeProfile(id: string) {
     try {
       await dialog({ content: renderRemoveUserDialogContent() });
-      this.profiles = this.profiles.filter((profile) => profile.id !== id);
+      this.removedProfileIds = [...this.removedProfileIds, id];
     } catch (error) {
       console.log('error', error);
     }
@@ -116,9 +136,7 @@ export class ProfileListElement extends LitElement {
       justify-content: center;
       position: relative;
     }
-    .user &button > svg {
-      --_icon-size: var(--size-fluid-4);
-    }
+
     .user > button {
       position: absolute;
       inset-block-start: 0;
@@ -127,6 +145,19 @@ export class ProfileListElement extends LitElement {
       padding: 0.75ch;
       aspect-ratio: 1;
       flex-shrink: 0;
+    }
+
+    .new {
+      animation-name: fade-in;
+      animation-direction: forwards;
+      animation-timing-function: ease-out;
+      animation-duration: 250ms;
+    }
+    [removing] {
+      animation-name: fade-out;
+      animation-direction: forwards;
+      animation-timing-function: ease-out;
+      animation-duration: 250ms;
     }
 
     button[add-user] svg {
@@ -140,6 +171,36 @@ export class ProfileListElement extends LitElement {
     }
     line {
       stroke: currentColor;
+    }
+
+    @keyframes fade-in {
+      0% {
+        opacity: 0;
+        transform: scale(0);
+      }
+      90% {
+        opacity: 1;
+        transform: scale(1.1);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes fade-out {
+      0% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      10% {
+        opacity: 1;
+        transform: scale(1.1);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(0);
+      }
     }
 
     ::slotted(h1) {

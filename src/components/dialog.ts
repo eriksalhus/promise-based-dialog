@@ -1,8 +1,9 @@
 import { type TemplateResult, html, render } from 'lit';
 
+type DialogResultType = 'button' | 'reset' | 'submit';
 export interface DialogResult {
   id: number;
-  type: 'cancel' | 'close' | 'reset' | 'submit';
+  type: DialogResultType;
   [key: string]: any;
 }
 
@@ -30,38 +31,37 @@ export function renderDialog({
   const id = Date.now();
   return html`
     <dialog
-      id="${id}"
+      id="dialog-${id}"
       inert
-      loading
       @submit="${async function (this: HTMLDialogElement, event: Event) {
-        /* resolve({
-          id,
-          type: 'submit',
-          formData: Object.fromEntries(
-            new FormData(event.target as HTMLFormElement)
-          ),
-        }); */
-
         this.dataset.resolution = event.type;
         this.formData = Object.fromEntries(
           new FormData(event.target as HTMLFormElement)
         );
       }}"
       @reset="${async function (this: HTMLDialogElement, event: Event) {
-        //reject({ id, type: 'reset' });
         this.dataset.resolution = event.type;
       }}"
       @close="${async function (this: HTMLDialogElement, _event: Event) {
-        const resolutionType = this.dataset.resolution;
+        const resolutionType = (this.dataset.resolution ??
+          'reset') as DialogResultType;
+
         this.setAttribute('inert', '');
+
         this.dispatchEvent(dialogClosingEvent);
-        await animationsComplete(this);
-        this.dispatchEvent(dialogClosedEvent);
-        this.remove();
+
         if (resolutionType === 'submit') {
           resolve({ id, type: resolutionType, formData: this.formData });
+        } else {
+          reject({ id, type: resolutionType });
         }
-        dispatchEvent(dialogRemovedEvent);
+
+        await animationsComplete(this);
+
+        this.dispatchEvent(dialogClosedEvent);
+
+        this.dispatchEvent(dialogRemovedEvent);
+        this.remove();
       }}"
     >
       ${content}
@@ -89,10 +89,16 @@ export async function dialog({
     const dialogElement = dialogElements[dialogElements.length - 1];
 
     dialogElement.dispatchEvent(dialogOpeningEvent);
-    dialogElement?.removeAttribute('loading');
     dialogElement?.showModal();
-    await animationsComplete(dialogElement);
     dialogElement?.removeAttribute('inert');
+    await animationsComplete(dialogElement);
+
+    const autofocusElement =
+      dialogElement.querySelector<HTMLElement>('[autofocus]');
+
+    if (autofocusElement) {
+      autofocusElement.focus();
+    }
     dialogElement.dispatchEvent(dialogOpenedEvent);
   });
 }

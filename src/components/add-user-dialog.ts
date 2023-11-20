@@ -41,7 +41,7 @@ export function renderAddUserDialogContent() {
       <article>
         <h4>Select your avatar</h4>
         <ul class="avatar-list">
-          ${avatars.map((hash) => {
+          ${avatars.map((hash, index) => {
             return html` <li>
               <input type="radio" id="${hash}" name="avatar" value="${hash}" />
               <label
@@ -55,14 +55,13 @@ export function renderAddUserDialogContent() {
       <footer>
         <button
           type="reset"
-          autofocus
           @click="${(event: MouseEvent) => {
             (event.target as HTMLElement).closest('dialog')?.close('cancel');
           }}"
         >
           Reset
         </button>
-        <button>Submit</button>
+        <button autofocus>Submit</button>
       </footer>
     </form>
   `;

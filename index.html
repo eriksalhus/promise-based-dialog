@@ -9,7 +9,19 @@
     <script type="module" src="/src/index.ts"></script>
   </head>
   <body>
-    <profile-list-element></profile-list-element>
+    <profile-list-element>
+      <button class="user" add-user aria-label="Add user">
+        <svg
+          style="pointer-events: none"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+        >
+          <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor"></line>
+          <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor"></line>
+        </svg>
+      </button>
+    </profile-list-element>
     <a
       href="https://github.com/eriksalhus/promise-based-dialog"
       class="github-corner"
@@ -34,11 +46,18 @@
       </svg>
     </a>
     <script type="application/javascript">
-      document.addEventListener('dialog:opening', console.log);
+      /* document.addEventListener('dialog:opening', (event) => {
+        console.groupCollapsed('event: Lifecycle events for dialog');
+        console.log(event);
+      });
       document.addEventListener('dialog:opened', console.log);
       document.addEventListener('dialog:closing', console.log);
       document.addEventListener('dialog:closed', console.log);
-      document.addEventListener('dialog:removed', console.log);
+      document.addEventListener('dialog:removed', (event) => {
+        console.log(event);
+        console.groupEnd('event: Lifecycle events for dialog');
+      }); */
+      document.addEventListener('animationend', console.log);
     </script>
   </body>
 </html>
