@@ -33,14 +33,20 @@ export function renderDialog({
     <dialog
       id="dialog-${id}"
       inert
+      @click="${async function (this: HTMLDialogElement, event: MouseEvent) {
+        if ((event.target as HTMLButtonElement).type === 'button') {
+          this.dataset.resolution = event.type;
+          this.close('Cancelled by user');
+        }
+      }}"
       @submit="${async function (this: HTMLDialogElement, event: Event) {
         this.dataset.resolution = event.type;
         this.formData = Object.fromEntries(
           new FormData(event.target as HTMLFormElement)
         );
       }}"
-      @reset="${async function (this: HTMLDialogElement, event: Event) {
-        this.dataset.resolution = event.type;
+      @reset="${async function (this: HTMLDialogElement, _event: Event) {
+        this.querySelector('form')?.reset();
       }}"
       @close="${async function (this: HTMLDialogElement, _event: Event) {
         const resolutionType = (this.dataset.resolution ??

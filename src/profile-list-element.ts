@@ -34,6 +34,7 @@ export class ProfileListElement extends LitElement {
 
   render() {
     return html`
+      <link rel="stylesheet" href="./src/index.css" />
       ${this.profiles.map(this.renderProfile)}
       <slot></slot>
     `;
@@ -72,8 +73,8 @@ export class ProfileListElement extends LitElement {
           @click="${() => this.removeProfile(profile.id)}"
         >
           <svg width="24" height="24" viewBox="0 0 24 24">
-            <line x1="18" y1="6" x2="6" y2="18" />
-            <line x1="6" y1="6" x2="18" y2="18" />
+            <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" />
+            <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" />
           </svg>
         </button>
       </div>
@@ -109,103 +110,11 @@ export class ProfileListElement extends LitElement {
 
   static styles = css`
     :host {
-      --ratio-square: 1;
-      --radius-round: 1e5px;
-      --size-m: 1.5rem;
-      --border-xs: 1px;
-      --color-purple: #9c27b0;
-      --color-white: #fff;
-      --avatar-width: clamp(7.5rem, 10vw, 10rem);
-
       display: flex;
       flex-wrap: wrap;
       place-content: center;
       gap: var(--size-5);
       transition: all 250ms ease-in-out;
-    }
-
-    .user {
-      width: var(--avatar-width);
-      aspect-ratio: var(--ratio-square);
-      border-radius: var(--radius-round);
-      border: var(--border-size-1) solid var(--surface-4);
-      display: flex;
-      align-items: stretch;
-      justify-content: stretch;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-
-    .user > button {
-      position: absolute;
-      inset-block-start: 0;
-      inset-inline-end: 0;
-      border-radius: var(--radius-round);
-      padding: 0.75ch;
-      aspect-ratio: 1;
-      flex-shrink: 0;
-    }
-
-    .new {
-      animation-name: fade-in;
-      animation-direction: forwards;
-      animation-timing-function: ease-out;
-      animation-duration: 250ms;
-    }
-    [removing] {
-      animation-name: fade-out;
-      animation-direction: forwards;
-      animation-timing-function: ease-out;
-      animation-duration: 250ms;
-    }
-
-    button[add-user] svg {
-      width: 50px;
-      height: 50px;
-    }
-
-    .user img {
-      border-radius: inherit;
-      width: 100%;
-    }
-    line {
-      stroke: currentColor;
-    }
-
-    @keyframes fade-in {
-      0% {
-        opacity: 0;
-        transform: scale(0);
-      }
-      90% {
-        opacity: 1;
-        transform: scale(1.1);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-
-    @keyframes fade-out {
-      0% {
-        opacity: 1;
-        transform: scale(1);
-      }
-      10% {
-        opacity: 1;
-        transform: scale(1.1);
-      }
-      100% {
-        opacity: 0;
-        transform: scale(0);
-      }
-    }
-
-    ::slotted(h1) {
-      font-size: 3.2em;
-      line-height: 1.1;
     }
   `;
 }

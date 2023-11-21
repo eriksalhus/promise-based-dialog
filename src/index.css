@@ -1,13 +1,11 @@
 @import 'open-props/style';
-@import 'open-props/normalize';
 @import 'open-props/media';
+@import 'open-props/normalize';
 @import 'open-props/buttons';
 
 @import url('./components/dialog.css');
 
 :root {
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
   --size-m: 1.5rem;
 }
 
@@ -50,17 +48,35 @@ main {
     flex-shrink: 0;
   }
 
+  &.new {
+    animation-name: fade-in;
+    animation-direction: forwards;
+    animation-timing-function: ease-out;
+    animation-duration: 250ms;
+  }
+
+  &[removing] {
+    animation-name: fade-out;
+    animation-direction: forwards;
+    animation-timing-function: ease-out;
+    animation-duration: 250ms;
+  }
+
+  &.new:not(button) {
+    animation: var(--animation-slide-in-down), var(--animation-fade-in) forwards;
+    animation-timing-function: var(--ease-elastic-3), var(--ease-3);
+  }
+
   & img {
     border-radius: inherit;
   }
 }
 
 .avatar-list {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
   list-style: none;
   padding: 0;
-  gap: 1rem;
   margin: 0;
 }
 
@@ -70,8 +86,11 @@ main {
 
 .avatar-list label {
   cursor: pointer;
-  width: var(--size-11);
-  height: var(--size-11);
+  width: 100%;
+  min-width: 90px;
+  min-height: 90px;
+  /* width: var(--size-11);
+  height: var(--size-11); */
   background-size: contain;
   background-repeat: no-repeat;
   display: inline-block;
@@ -97,8 +116,9 @@ main {
   outline: none;
 }
 
+.avatar-list input:focus-visible + label,
 .avatar-list input:hover + label {
-  transform: scale(1.2);
+  transform: scale(1.4);
   filter: none;
 }
 
@@ -115,6 +135,7 @@ main {
   & > svg {
     inline-size: 100%;
     stroke: var(--text-2);
+    fill: none;
   }
 }
 
@@ -127,6 +148,7 @@ main {
 .icon-headline > svg {
   inline-size: 2em;
   stroke: var(--text-2);
+  fill: none;
 }
 
 .github-corner {

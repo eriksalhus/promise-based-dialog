@@ -9,6 +9,10 @@ const avatars = [
   '30046aa5a7238a3ebf64f1396101c4dc',
   '945241ba2ddd23623c9c1934264f6ac2',
   '284470c11c380507f1085e2fde32d467',
+  '90fb430786896c76d8378d95926ee919',
+  '4c274c32d30ad34a53313291cc7e77d8',
+  '75dc525986b2aa8f2152d44e238b331a',
+  '2f83202afd7333fd1f10f80714beef64',
 ];
 
 export function renderAddUserDialogContent() {
@@ -24,15 +28,14 @@ export function renderAddUserDialogContent() {
           </svg>
           <h3>New User</h3>
         </section>
-        <button
-          title="Close dialog"
-          type="reset"
-          @click="${(event: MouseEvent) => {
-            (event.target as HTMLElement).closest('dialog')?.close('close');
-          }}"
-        >
+        <button title="Close dialog" type="button" value="Aborted by the user">
           <title>Close dialog icon</title>
-          <svg width="24" height="24" viewBox="0 0 24 24">
+          <svg
+            style="pointer-events: none;"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+          >
             <line x1="18" y1="6" x2="6" y2="18" />
             <line x1="6" y1="6" x2="18" y2="18" />
           </svg>
@@ -41,7 +44,7 @@ export function renderAddUserDialogContent() {
       <article>
         <h4>Select your avatar</h4>
         <ul class="avatar-list">
-          ${avatars.map((hash, index) => {
+          ${avatars.map((hash) => {
             return html` <li>
               <input type="radio" id="${hash}" name="avatar" value="${hash}" />
               <label
@@ -53,15 +56,13 @@ export function renderAddUserDialogContent() {
         </ul>
       </article>
       <footer>
-        <button
-          type="reset"
-          @click="${(event: MouseEvent) => {
-            (event.target as HTMLElement).closest('dialog')?.close('cancel');
-          }}"
-        >
-          Reset
-        </button>
-        <button autofocus>Submit</button>
+        <menu>
+          <button type="reset">Clear</button>
+        </menu>
+        <menu>
+          <button type="button" autofocus>Cancel</button>
+          <button type="submit">Confirm</button>
+        </menu>
       </footer>
     </form>
   `;
