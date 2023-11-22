@@ -70,7 +70,12 @@ export class ProfileListElement extends LitElement {
           aria-label="Remove user 1"
           @click="${this.createRemoveProfileHandler(profile.id)}"
         >
-          <svg width="24" height="24" viewBox="0 0 24 24">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            style="pointer-events: none;"
+          >
             <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" />
             <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" />
           </svg>
@@ -103,9 +108,7 @@ export class ProfileListElement extends LitElement {
         await dialog({
           content: renderRemoveUserDialogContent(),
           options: {
-            relativePlacementElement: (event.target as HTMLElement).closest(
-              'button'
-            ),
+            relativePlacementElement: event.target as HTMLElement,
           },
         });
         this.removedProfileIds = [...this.removedProfileIds, id];
