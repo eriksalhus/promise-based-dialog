@@ -42,18 +42,22 @@ export function renderAddUserDialogContent() {
         </button>
       </header>
       <article>
-        <h4>Select your avatar</h4>
-        <ul class="avatar-list">
+        <section class="labelled-input">
+          <label for="userimage">Upload an image</label>
+          <input id="userimage" name="userimage" type="file" />
+        </section>
+        <small><b>*</b> Maximum upload 1mb</small>
+        <!-- <ul class="avatar-list">
           ${avatars.map((hash) => {
-            return html` <li>
-              <input type="radio" id="${hash}" name="avatar" value="${hash}" />
-              <label
-                for="${hash}"
-                style="background-image: url(https://doodleipsum.com/700x700/avatar-5?i=${hash});"
-              ></label>
-            </li>`;
-          })}
-        </ul>
+          return html` <li>
+            <input type="radio" id="${hash}" name="avatar" value="${hash}" />
+            <label
+              for="${hash}"
+              style="background-image: url(https://doodleipsum.com/700x700/avatar-5?i=${hash});"
+            ></label>
+          </li>`;
+        })}
+        </ul> -->
       </article>
       <footer>
         <menu>

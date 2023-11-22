@@ -62,10 +62,7 @@ export class ProfileListElement extends LitElement {
           );
         }}"
       >
-        <img
-          src="https://doodleipsum.com/700x700/avatar-5?i=${profile.avatar}"
-          alt=""
-        />
+        <img src="${profile.avatar}" alt="Profile avatar" />
         <button
           aria-label="Remove user 1"
           @click="${this.createRemoveProfileHandler(profile.id)}"
@@ -86,17 +83,27 @@ export class ProfileListElement extends LitElement {
 
   private async handleAddProfile() {
     try {
-      const result = await dialog({
-        content: renderAddUserDialogContent(),
-      });
-      this.profiles = [
-        ...this.profiles,
-        {
-          id: `profile-${Date.now()}`,
-          avatar: result.formData.avatar,
-        },
-      ];
-      console.info(`Dialog id="${result.id}" resolved`, result);
+      const { id, formData } = await dialog(renderAddUserDialogContent());
+
+      const file = formData.userimage as File;
+      if (!file.size) return;
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      const { target }: ProgressEvent<FileReader> = await new Promise(
+        (resolve) => (reader.onload = resolve)
+      );
+
+      if (target) {
+        this.profiles = [
+          ...this.profiles,
+          {
+            id: `profile-${Date.now()}`,
+            avatar: target.result as string,
+          },
+        ];
+      }
+      console.info(`Dialog id="${id}" resolved`, formData);
     } catch (result) {
       console.error(`Dialog rejected`, result);
     }
@@ -105,11 +112,8 @@ export class ProfileListElement extends LitElement {
   createRemoveProfileHandler = (id: string) => {
     return async (event: MouseEvent) => {
       try {
-        await dialog({
-          content: renderRemoveUserDialogContent(),
-          options: {
-            relativePlacementElement: event.target as HTMLElement,
-          },
+        await dialog(renderRemoveUserDialogContent(), {
+          relativePlacementElement: event.target as HTMLElement,
         });
         this.removedProfileIds = [...this.removedProfileIds, id];
       } catch (error) {

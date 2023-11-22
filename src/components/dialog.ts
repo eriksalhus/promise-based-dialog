@@ -1,6 +1,6 @@
 import { type TemplateResult, html, render } from 'lit';
 
-type DialogResultType = 'button' | 'reset' | 'submit';
+type DialogResultType = 'cancel' | 'submit';
 export interface DialogResult {
   id: number;
   type: DialogResultType;
@@ -8,11 +8,8 @@ export interface DialogResult {
 }
 
 export interface DialogOptions {
-  content: TemplateResult;
-  options?: {
-    root?: ShadowRoot | Document | HTMLElement;
-    relativePlacementElement?: HTMLElement;
-  };
+  root?: ShadowRoot | Document | HTMLElement;
+  relativePlacementElement?: HTMLElement;
 }
 
 // custom events to be added to <dialog>
@@ -38,12 +35,12 @@ export function renderDialog({
       inert
       @click="${async function (this: HTMLDialogElement, event: MouseEvent) {
         if ((event.target as HTMLButtonElement).type === 'button') {
-          this.dataset.resolution = event.type;
+          this.dataset.resolution = 'cancel';
           this.close('Cancelled by user');
         }
       }}"
       @submit="${async function (this: HTMLDialogElement, event: Event) {
-        this.dataset.resolution = event.type;
+        this.dataset.resolution = 'submit';
         this.formData = Object.fromEntries(
           new FormData(event.target as HTMLFormElement)
         );
@@ -53,10 +50,9 @@ export function renderDialog({
       }}"
       @close="${async function (this: HTMLDialogElement, _event: Event) {
         const resolutionType = (this.dataset.resolution ??
-          'button') as DialogResultType;
+          'cancel') as DialogResultType;
 
         this.setAttribute('inert', '');
-
         this.dispatchEvent(dialogClosingEvent);
 
         if (resolutionType === 'submit') {
@@ -84,10 +80,13 @@ const animationsComplete = (element: HTMLElement) =>
     element.getAnimations().map((animation) => animation.finished)
   );
 
-export async function dialog({
-  content,
-  options: { root = document.body, relativePlacementElement } = {},
-}: DialogOptions): Promise<DialogResult> {
+export async function dialog(
+  content: TemplateResult,
+  options?: DialogOptions
+): Promise<DialogResult> {
+  const root = options?.root ?? document.body;
+  const relativePlacementElement = options?.relativePlacementElement;
+
   return new Promise<DialogResult>(async (resolve, reject) => {
     const renderBuffer = document.createDocumentFragment();
 
@@ -140,7 +139,7 @@ function getDialogPosition(
   const bounds = element.getBoundingClientRect();
 
   const top = bounds.top - dialogBounds.height;
-  const left = bounds.left - dialogBounds.width / 2;
+  const left = bounds.left + bounds.width / 2 - dialogBounds.width / 2;
 
   return { top: `${top > 0 ? top : 10}px`, left: `${left > 0 ? left : 10}px` };
 }
