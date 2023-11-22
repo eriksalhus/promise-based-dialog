@@ -19,7 +19,8 @@ export class ProfileListElement extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     this.renderProfile = this.renderProfile.bind(this);
-    this.removeProfile = this.removeProfile.bind(this);
+    this.createRemoveProfileHandler =
+      this.createRemoveProfileHandler.bind(this);
     this.handleAddProfile = this.handleAddProfile.bind(this);
     this.addEventListener('click', this);
   }
@@ -50,9 +51,6 @@ export class ProfileListElement extends LitElement {
         ?removing="${this.removedProfileIds.includes(profile.id)}"
         @animationend="${(event: AnimationEvent) => {
           if (event.animationName !== 'fade-out') {
-            //throw new Error('Unexpected animation name');
-            console.log('Unexpected animation name');
-
             return;
           }
 
@@ -70,7 +68,7 @@ export class ProfileListElement extends LitElement {
         />
         <button
           aria-label="Remove user 1"
-          @click="${() => this.removeProfile(profile.id)}"
+          @click="${this.createRemoveProfileHandler(profile.id)}"
         >
           <svg width="24" height="24" viewBox="0 0 24 24">
             <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" />
@@ -99,14 +97,23 @@ export class ProfileListElement extends LitElement {
     }
   }
 
-  private async removeProfile(id: string) {
-    try {
-      await dialog({ content: renderRemoveUserDialogContent() });
-      this.removedProfileIds = [...this.removedProfileIds, id];
-    } catch (error) {
-      console.log('error', error);
-    }
-  }
+  createRemoveProfileHandler = (id: string) => {
+    return async (event: MouseEvent) => {
+      try {
+        await dialog({
+          content: renderRemoveUserDialogContent(),
+          options: {
+            relativePlacementElement: (event.target as HTMLElement).closest(
+              'button'
+            ),
+          },
+        });
+        this.removedProfileIds = [...this.removedProfileIds, id];
+      } catch (error) {
+        console.log('error', error);
+      }
+    };
+  };
 
   static styles = css`
     :host {

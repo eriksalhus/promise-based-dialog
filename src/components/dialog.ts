@@ -9,7 +9,10 @@ export interface DialogResult {
 
 export interface DialogOptions {
   content: TemplateResult;
-  root?: ShadowRoot | Document | HTMLElement;
+  options?: {
+    root?: ShadowRoot | Document | HTMLElement;
+    relativePlacementElement?: HTMLElement;
+  };
 }
 
 // custom events to be added to <dialog>
@@ -50,7 +53,7 @@ export function renderDialog({
       }}"
       @close="${async function (this: HTMLDialogElement, _event: Event) {
         const resolutionType = (this.dataset.resolution ??
-          'reset') as DialogResultType;
+          'button') as DialogResultType;
 
         this.setAttribute('inert', '');
 
@@ -83,7 +86,7 @@ const animationsComplete = (element: HTMLElement) =>
 
 export async function dialog({
   content,
-  root = document.body,
+  options: { root = document.body, relativePlacementElement } = {},
 }: DialogOptions): Promise<DialogResult> {
   return new Promise<DialogResult>(async (resolve, reject) => {
     const renderBuffer = document.createDocumentFragment();
@@ -95,8 +98,24 @@ export async function dialog({
     const dialogElement = dialogElements[dialogElements.length - 1];
 
     dialogElement.dispatchEvent(dialogOpeningEvent);
+
+    const dialogPosition = getDialogPosition(
+      dialogElement,
+      relativePlacementElement
+    );
+
+    if (dialogPosition) {
+      dialogElement.style.top = dialogPosition.top;
+      dialogElement.style.left = dialogPosition.left;
+      // Dialogs are usually positioned in the center of the screen,
+      // so we need to remove the margin to avoid the dialog being centered
+      dialogElement.style.margin = 'unset';
+      dialogElement.setAttribute('relative-placement', '');
+    }
+
     dialogElement?.showModal();
     dialogElement?.removeAttribute('inert');
+
     await animationsComplete(dialogElement);
 
     const autofocusElement =
@@ -107,4 +126,21 @@ export async function dialog({
     }
     dialogElement.dispatchEvent(dialogOpenedEvent);
   });
+}
+
+function getDialogPosition(
+  dialogElement: HTMLDialogElement,
+  element?: HTMLElement
+): { top: string; left: string } | undefined {
+  if (element === undefined) {
+    return;
+  }
+
+  const dialogBounds = dialogElement.getBoundingClientRect();
+  const bounds = element.getBoundingClientRect();
+
+  const top = bounds.top - dialogBounds.height;
+  const left = bounds.left - dialogBounds.width / 2;
+
+  return { top: `${top > 0 ? top : 10}px`, left: `${left > 0 ? left : 10}px` };
 }

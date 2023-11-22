@@ -46,6 +46,9 @@ dialog {
   &::backdrop {
     backdrop-filter: blur(25px);
   }
+  &[relative-placement]::backdrop {
+    backdrop-filter: none;
+  }
 
   &::backdrop {
     transition: backdrop-filter 250ms ease;
@@ -130,12 +133,6 @@ dialog {
 
         &:only-child {
           margin-inline-start: auto;
-        }
-
-        @media (max-width: 410px) {
-          & button[type='reset'] {
-            display: none;
-          }
         }
       }
     }
