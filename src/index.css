@@ -126,6 +126,13 @@ main {
   filter: none;
 }
 
+.labelled-input {
+  display: flex;
+  gap: var(--size-3);
+  flex-wrap: wrap;
+  align-items: center;
+}
+
 .warning-message {
   display: grid;
   grid-template-columns: var(--size-fluid-3) 1fr;
@@ -143,12 +150,17 @@ main {
   display: flex;
   gap: var(--size-3);
   align-items: center;
+
+  & > svg {
+    inline-size: 2em;
+    stroke: var(--text-2);
+  }
 }
 
-.icon-headline > svg {
-  inline-size: 2em;
-  stroke: var(--text-2);
-  fill: none;
+@media (--md-n-below) {
+  input[type='file'] {
+    inline-size: 100%;
+  }
 }
 
 .github-corner {

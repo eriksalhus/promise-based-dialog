@@ -8,7 +8,6 @@ export interface DialogResult {
 }
 
 export interface DialogOptions {
-  root?: ShadowRoot | Document | HTMLElement;
   relativePlacementElement?: HTMLElement;
 }
 
@@ -44,9 +43,6 @@ export function renderDialog({
         this.formData = Object.fromEntries(
           new FormData(event.target as HTMLFormElement)
         );
-      }}"
-      @reset="${async function (this: HTMLDialogElement, _event: Event) {
-        this.querySelector('form')?.reset();
       }}"
       @close="${async function (this: HTMLDialogElement, _event: Event) {
         const resolutionType = (this.dataset.resolution ??
@@ -84,17 +80,14 @@ export async function dialog(
   content: TemplateResult,
   options?: DialogOptions
 ): Promise<DialogResult> {
-  const root = options?.root ?? document.body;
   const relativePlacementElement = options?.relativePlacementElement;
 
   return new Promise<DialogResult>(async (resolve, reject) => {
     const renderBuffer = document.createDocumentFragment();
 
     render(renderDialog({ content, resolve, reject }), renderBuffer);
-    root.appendChild(renderBuffer);
-
-    const dialogElements = root.querySelectorAll('dialog');
-    const dialogElement = dialogElements[dialogElements.length - 1];
+    const dialogElement = renderBuffer.firstElementChild as HTMLDialogElement;
+    document.body.appendChild(dialogElement);
 
     dialogElement.dispatchEvent(dialogOpeningEvent);
 

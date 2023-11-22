@@ -16,28 +16,34 @@ export class ProfileListElement extends LitElement {
   @property({ type: Array })
   removedProfileIds: string[] = [];
 
-  connectedCallback() {
-    super.connectedCallback();
+  constructor() {
+    super();
+
     this.renderProfile = this.renderProfile.bind(this);
     this.createRemoveProfileHandler =
       this.createRemoveProfileHandler.bind(this);
     this.handleAddProfile = this.handleAddProfile.bind(this);
-    this.addEventListener('click', this);
-  }
-
-  handleEvent(event: Event) {
-    if (event.target instanceof HTMLButtonElement) {
-      if (event.target.hasAttribute('add-user')) {
-        this.handleAddProfile();
-      }
-    }
   }
 
   render() {
     return html`
       <link rel="stylesheet" href="./src/index.css" />
       ${this.profiles.map(this.renderProfile)}
-      <slot></slot>
+      <button
+        class="user"
+        aria-label="Add user"
+        @click="${this.handleAddProfile}"
+      >
+        <svg
+          style="pointer-events: none"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+        >
+          <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor"></line>
+          <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor"></line>
+        </svg>
+      </button>
     `;
   }
 
@@ -81,7 +87,7 @@ export class ProfileListElement extends LitElement {
     `;
   }
 
-  private async handleAddProfile() {
+  async handleAddProfile() {
     try {
       const { id, formData } = await dialog(renderAddUserDialogContent());
 
