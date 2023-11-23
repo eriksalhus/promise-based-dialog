@@ -51,7 +51,7 @@ dialog {
   }
 
   &::backdrop {
-    transition: backdrop-filter 250ms ease;
+    transition: backdrop-filter 500ms ease;
   }
 
   &[loading] {
@@ -61,7 +61,7 @@ dialog {
   &[open] {
     @media (--motionOK) {
       animation: var(--animation-slide-in-up) forwards;
-      animation-duration: 250ms;
+      animation-duration: 500ms;
     }
   }
 

@@ -45,22 +45,22 @@ export function renderDialog({
         );
       }}"
       @close="${async function (this: HTMLDialogElement, _event: Event) {
-        const resolutionType = (this.dataset.resolution ??
-          'cancel') as DialogResultType;
-
         this.setAttribute('inert', '');
         this.dispatchEvent(dialogClosingEvent);
 
-        if (resolutionType === 'submit') {
-          resolve({ id, type: resolutionType, formData: this.formData });
+        if (this.dataset.resolution === 'submit') {
+          resolve({
+            id,
+            type: 'submit',
+            formData: this.formData,
+          });
         } else {
-          reject({ id, type: resolutionType });
+          reject({ id, type: 'cancel' });
         }
 
         await animationsComplete(this);
 
         this.dispatchEvent(dialogClosedEvent);
-
         this.dispatchEvent(dialogRemovedEvent);
         this.remove();
       }}"
@@ -105,8 +105,8 @@ export async function dialog(
       dialogElement.setAttribute('relative-placement', '');
     }
 
-    dialogElement?.showModal();
-    dialogElement?.removeAttribute('inert');
+    dialogElement.showModal();
+    dialogElement.removeAttribute('inert');
 
     await animationsComplete(dialogElement);
 
