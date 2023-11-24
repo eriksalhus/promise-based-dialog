@@ -7,8 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "start": "firebase serve",
-    "deploy": "firebase deploy"
+    "start": "firebase serve"
   },
   "dependencies": {
     "lit": "^2.8.0",
