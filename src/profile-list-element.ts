@@ -3,6 +3,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { dialog } from './components/dialog';
 import { renderAddUserDialogContent } from './components/add-user-dialog';
 import { renderRemoveUserDialogContent } from './components/remove-user-dialog';
+import style from './index.css?inline';
 
 export interface Profile {
   id: string;
@@ -27,7 +28,9 @@ export class ProfileListElement extends LitElement {
 
   render() {
     return html`
-      <link rel="stylesheet" href="./src/index.css" />
+      <style>
+        ${style}
+      </style>
       ${this.profiles.map(this.renderProfile)}
       <button
         class="user"

@@ -6,13 +6,15 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "firebase serve"
   },
   "dependencies": {
     "lit": "^2.8.0",
     "open-props": "^1.6.11"
   },
   "devDependencies": {
+    "firebase": "^10.6.0",
     "postcss-preset-env": "^9.3.0",
     "typescript": "^5.2.2",
     "vite": "^4.5.0"
